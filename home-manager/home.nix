@@ -1,4 +1,11 @@
-{ config, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+let
+  plugins = with pkgs; [
+    tmuxPlugins.sensible
+    tmuxPlugins.sysstat
+  ];
+in
+{
   programs.zsh.enable = true;
   nixpkgs = {
     config = { allowUnfree = true; };
@@ -12,18 +19,21 @@
   programs.tmux = {
     enable = true;
     clock24 = true;
+    terminal = "tmux-256color";
     
-    plugins = with pkgs; [
-      tmuxPlugins.sensible
-    ];
+    # The run-shell has to come near the end of the file for some reason, but the nix tmux config will
+    # put it earlier in the file. Re-running run-shell doesn't seem to hurt anything...
     extraConfig = ''
-      set -g status-interval 2
+      set -g default-terminal "xterm-256color"
+      set -g status-interval 1
       set -g status-style bg='#222222',fg='#dddddd'
-      set -g status-right '#($TMUX_PLUGIN_MANAGER_PATH/tmux-mem-cpu-load/tmux-mem-cpu-load -g 0 --colors --interval 2)#[default]'
-      set -ag status-right '#[bg=#22222]#[fg=#ffffff] | #(whoami)@#h | %a %h-%d %H:%M#[default]'
+      set -g status-right "#{sysstat_cpu} | #{sysstat_mem} | #{sysstat_swap} | #{sysstat_loadavg} | #[fg=cyan]#(echo $USER)#[default]@#H"
+      set -ag status-right '| %a %h-%d %H:%M#[default]'
       set -g status-right-length 120
-
-      run '~/.tmux/plugins/tpm/tpm'
+      set-environment -g COLORTERM "truecolor"
+      ${lib.concatStrings (map (x: ''
+      run-shell ${x.rtp}
+      '') plugins)}
     '';
   };
 
