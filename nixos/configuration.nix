@@ -59,6 +59,9 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Enable Tailscale network
+  services.tailscale.enable = true;
+
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -84,6 +87,7 @@
     isNormalUser = true;
     description = "geoffeg";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
       kate
@@ -100,7 +104,8 @@
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     btop
-  #  wget
+    wget
+    zsh
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -110,6 +115,7 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+  programs.zsh.enable = true;
 
   # List services that you want to enable:
 

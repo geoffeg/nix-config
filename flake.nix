@@ -3,11 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+   
+    home-manager.url = "github:nix-community/home-manager/release-23.11";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, ...}@inputs: let
+  outputs = { self, nixpkgs, home-manager, ...}@inputs: let
     inherit (self) outputs;
-    systems = [ "i686-linux" "aarch64-linux" ];
+    systems = [ "x86_64-linux" "aarch64-linux" ];
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
     nixosConfigurations = {
@@ -18,5 +21,15 @@
         ];
       };
     };
+    
+    homeConfigurations = {
+      "geoffeg@nixos" = home-manager.lib.homeManagerConfiguration {
+       pkgs = nixpkgs.legacyPackages.aarch64-linux;
+       extraSpecialArgs = {inherit inputs outputs;};
+       modules = [
+         ./home-manager/home.nix
+      ];
+    };
   };
+ };
 }
