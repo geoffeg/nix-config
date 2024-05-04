@@ -2,7 +2,12 @@
 
 Based on [EmergentMind's Nix Configs](https://github.com/EmergentMind/nix-config/tree/dev/home/ta/common/core).
 
-Layout:
+## Getting started in NixOS:
+1. After installation, run `nix-shell -p git nixFlakes` to get the necessary tools.
+2. Clone this repo with `git clone`.
+3. Run `sudo nixos-rebuild switch --flake .#<hostname>` in the repo to get the necessary tools.
+
+## Layout:
 ```
 nix-config/
 ├-- README.md        # You are here.
@@ -14,5 +19,7 @@ nix-config/
 |   └-- tmux.nix     # Config for tmux
 ├-- hosts/           # Nix/NixOS configs, system-wide configurations.
     ├-- common/      # NixOS configs common for all hosts
+    ├-- nixtest/     # NixOS configs for NixTest
     └-- lore/        # NixOS configs for Lore
+
 ```

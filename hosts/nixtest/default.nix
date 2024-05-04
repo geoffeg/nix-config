@@ -2,29 +2,40 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, configLib, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      inputs.hardware.nixosModules.lenovo.thinkpad.x1.6th-gen
+      (configLib.relativeToRoot "hosts/common")
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      timeout = 3;
+    };
+  };
 
-  boot.initrd.luks.devices."luks-f6108027-07f7-4e60-9203-1f43036ac73e".device = "/dev/disk/by-uuid/f6108027-07f7-4e60-9203-1f43036ac73e";
-  networking.hostName = "nixos"; # Define your hostname.
+  networking = {
+    hostName = "nixtest";
+    networkmanager.enable = true;
+  };
+
+
+#   boot.initrd.luks.devices."luks-f6108027-07f7-4e60-9203-1f43036ac73e".device = "/dev/disk/by-uuid/f6108027-07f7-4e60-9203-1f43036ac73e";
+  #networking.hostName = "nixtest"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+#   nix.settings.experimental-features = ["nix-command" "flakes"];
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  #networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -60,9 +71,6 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable Tailscale network
-  services.tailscale.enable = true;
-
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -84,30 +92,18 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.geoffeg = {
-    isNormalUser = true;
-    description = "geoffeg";
-    extraGroups = [ "networkmanager" "wheel" ];
-    shell = pkgs.zsh;
-    packages = with pkgs; [
-      firefox
-      kate
-    #  thunderbird
-    ];
-  };
+#   users.users.geoffeg = {
+#     isNormalUser = true;
+#     description = "geoffeg";
+#     extraGroups = [ "networkmanager" "wheel" ];
+#     shell = pkgs.zsh;
+#     packages = with pkgs; [
+#       firefox
+#       kate
+#     #  thunderbird
+#     ];
+#   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    git
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    btop
-    wget
-    zsh
-  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -116,12 +112,12 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-  programs.zsh.enable = true;
+  programs.nix-ld.enable = true;
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+#   services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

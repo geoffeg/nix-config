@@ -7,6 +7,7 @@
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+    hardware.url = "github:nixos/nixos-hardware/master";
   };
 
   outputs = { self, nixpkgs, home-manager, vscode-server, ...}@inputs: let
