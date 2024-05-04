@@ -16,7 +16,7 @@
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
     nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
+      nixtest = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
           ./nixos/configuration.nix
