@@ -1,7 +1,8 @@
-{ inputs, outputs, lib, configLib, ... }: {
+{ inputs, outputs, lib, pkgs, configLib,  ... }: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
-  ] ++ (builtins.attrValues outputs.nixosModules);
+  ];
+#  ] ++ (builtins.attrValues outputs.nixosModules);
 
   i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
   time.timeZone = lib.mkDefault "America/Chicago";
@@ -15,7 +16,7 @@
 
     # This will add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+    #nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
     settings = {
       # See https://jackson.dev/post/nix-reasonable-defaults/
@@ -46,7 +47,7 @@
 
   nixpkgs = {
     # you can add global overlays here
-    overlays = builtins.attrValues outputs.overlays;
+    #overlays = builtins.attrValues outputs.overlays;
     config = {
       allowUnfree = true;
     };
@@ -93,7 +94,6 @@
       # }];
     };
     tailscale.enable = true;
-    services.openssh.enable = true;
   };
 
   hardware.enableRedistributableFirmware = true;
