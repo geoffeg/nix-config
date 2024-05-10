@@ -6,18 +6,30 @@
    
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    vscode-server.url = "github:nix-community/nixos-vscode-server";
+    nixos-hardware.url = "github:nixos/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs, home-manager, ...}@inputs: let
+  outputs = { self, nixpkgs, home-manager, vscode-server, ...}@inputs:
+  let
     inherit (self) outputs;
     systems = [ "x86_64-linux" "aarch64-linux" ];
     forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
+    inherit (nixpkgs) lib;
+    configLib = import ./lib { inherit lib; };
+    specialArgs = { inherit inputs outputs configLib nixpkgs; };
+  in
+  {
+    #nixosModules = import ./modules/nixos;
+    #homeManagerModules = import ./modules/home-manager;
     nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
+      nixtest = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
         modules = [
-          ./nixos/configuration.nix
+          home-manager.nixosModules.home-manager{
+            home-manager.extraSpecialArgs = specialArgs;
+          }
+          ./hosts/nixtest
         ];
       };
     };
