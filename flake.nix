@@ -7,32 +7,48 @@
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
-    hardware.url = "github:nixos/nixos-hardware/master";
+    nixos-hardware.url = "github:nixos/nixos-hardware/master";
+
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-23.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, vscode-server, ...}@inputs: let
+  outputs = { self, nixpkgs, home-manager, vscode-server, ...}@inputs:
+  let
     inherit (self) outputs;
     systems = [ "x86_64-linux" "aarch64-linux" ];
     forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
+    inherit (nixpkgs) lib;
+    configLib = import ./lib { inherit lib; };
+    specialArgs = { inherit inputs outputs configLib nixpkgs; };
+  in
+  {
+    #nixosModules = import ./modules/nixos;
+    #homeManagerModules = import ./modules/home-manager;
     nixosConfigurations = {
       nixtest = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
+        inherit specialArgs;
         modules = [
-          ./nixos/configuration.nix
-          vscode-server.nixosModules.default ({ config, pkgs, ... }: { services.vscode-server.enable = true; })
+          home-manager.nixosModules.home-manager{
+            home-manager.extraSpecialArgs = specialArgs;
+          }
+          ./hosts/nixtest
         ];
       };
+
+      # lore = ...
     };
     
-    homeConfigurations = {
-      "geoffeg@nixos" = home-manager.lib.homeManagerConfiguration {
-       pkgs = nixpkgs.legacyPackages.aarch64-linux;
-       extraSpecialArgs = {inherit inputs outputs;};
-       modules = [
-         ./home-manager/home.nix
-      ];
-    };
-  };
+    # homeConfigurations = {
+    #   "geoffeg@nixos" = home-manager.lib.homeManagerConfiguration {
+    #     pkgs = nixpkgs.legacyPackages.aarch64-linux;
+    #     extraSpecialArgs = {inherit inputs outputs;};
+    #     modules = [
+    #       ./home-manager/home.nix
+    #     ];
+    #   };
+    # };
  };
 }

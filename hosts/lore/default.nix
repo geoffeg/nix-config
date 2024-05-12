@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       inputs.hardware.nixosModules.lenovo.thinkpad.x1.6th-gen
+      (configLib.relativeToRoot "hosts/common")
     ];
 
   # Bootloader.
