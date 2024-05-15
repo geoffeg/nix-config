@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, configLib, ... }:
 let
   plugins = with pkgs; [
     tmuxPlugins.sensible
@@ -26,7 +26,9 @@ in
     eza
     fzf
     vim
+    (callPackage ../pkgs/wfview {})
   ];
+#    (callPackage (configLib.relativeToRoot "pkgs/wfview") {})
 
   programs = {
     home-manager.enable = true;

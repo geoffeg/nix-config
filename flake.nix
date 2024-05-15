@@ -25,6 +25,12 @@
     specialArgs = { inherit inputs outputs configLib nixpkgs; };
   in
   {
+
+    packages = forAllSystems
+      (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in import ./pkgs { inherit pkgs; }
+      );
     #nixosModules = import ./modules/nixos;
     #homeManagerModules = import ./modules/home-manager;
     nixosConfigurations = {
