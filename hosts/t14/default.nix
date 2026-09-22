@@ -6,12 +6,15 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./nvidia.nix
       ../../modules/common/default.nix
       ../../modules/desktop
       ../../modules/common/ssh.nix
       ../../modules/users/geoffeg.nix
+      ../../modules/laptop/power.nix
     ];
 
   networking = {

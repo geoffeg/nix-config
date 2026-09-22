@@ -8,4 +8,6 @@
       tree
     ];
   };
+
+  home-manager.users.geoffeg = import ../../home/geoffeg;
 }

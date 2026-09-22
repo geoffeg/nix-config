@@ -13,9 +13,14 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, disko, ... } @ inputs:
+  outputs = { self, nixpkgs, home-manager, disko, git-hooks, ... } @ inputs:
     let
       lib = nixpkgs.lib;
       ourLib = import ./lib { inherit inputs; };
@@ -31,6 +36,19 @@
         import nixpkgs {
           inherit system;
         };
+
+      mkPreCommitCheck = system: git-hooks.lib.${system}.run {
+        src = ./.;
+        hooks = {
+          gitleaks = {
+            enable = true;
+            name = "gitleaks";
+            entry = "${(mkPkgs system).gitleaks}/bin/gitleaks protect --staged --verbose --redact";
+            pass_filenames = false;
+          };
+          nixpkgs-fmt.enable = true;
+        };
+      };
     in
     {
       lib = ourLib;
@@ -46,5 +64,20 @@
       };
 
       formatter = forAllSystems (system: (mkPkgs system).nixpkgs-fmt);
+
+      checks = forAllSystems (system: {
+        pre-commit-check = mkPreCommitCheck system;
+      });
+
+      devShells = forAllSystems (system: {
+        default =
+          let
+            pkgs = mkPkgs system;
+          in
+          pkgs.mkShell {
+            inherit (self.checks.${system}.pre-commit-check) shellHook;
+            packages = [ pkgs.gitleaks ];
+          };
+      });
     };
 }
