@@ -21,7 +21,10 @@
 
   boot = {
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+        consoleMode = "keep";
+      };
       efi.canTouchEfiVariables = true;
     };
     resumeDevice = "/dev/mapper/cryptroot";
