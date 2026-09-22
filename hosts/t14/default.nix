@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/common/default.nix
-      ../../modules/desktop/default.nix
+      ../../modules/desktop
       ../../modules/common/ssh.nix
       ../../modules/users/geoffeg.nix
     ];

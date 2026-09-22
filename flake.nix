@@ -30,7 +30,6 @@
       mkPkgs = system:
         import nixpkgs {
           inherit system;
-          overlays = [ self.overlays.default ];
         };
     in
     {
@@ -45,15 +44,6 @@
         common = import ./modules/common;
         desktop = import ./modules/desktop;
       };
-
-      overlays.default = import ./overlays;
-
-      packages = forAllSystems (system:
-        let
-          pkgs = mkPkgs system;
-        in
-        import ./packages { inherit pkgs; }
-      );
 
       formatter = forAllSystems (system: (mkPkgs system).nixpkgs-fmt);
     };
