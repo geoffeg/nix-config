@@ -1,9 +1,10 @@
 # Geoff's (WIP) nix config
 
-An experimental nix-config using flakes. Currently limited to a Lenovo T14 Gen 2 laptop.
+An (experimental) nix-config using flakes and home manager.
 
 ## Useful commands:
-* Create a new shell with a temporary command: `nix-shell -p htop`
+* Run a one-off command without permanently installing it: `nix run nixpkgs#htop`
+* Create new shell with temporary packages available: `nix shell nixpkgs#git nixpkgs#htop`
 
 ## Hosts:
 
@@ -15,7 +16,5 @@ An experimental nix-config using flakes. Currently limited to a Lenovo T14 Gen 2
 
 ## TODO
 
-### Home Manager
-1. Setup git (user.email and user.name)
-
-# SOPS/AGE encryption
+* SOPS/AGE encryption
+* KDE configuration with home manager.
