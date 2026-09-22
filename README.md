@@ -1,4 +1,4 @@
-# Geoff's (WIP) nix config
+# geoffeg's (WIP) nix config
 
 An (experimental) nix-config using flakes and home manager.
 
