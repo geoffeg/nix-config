@@ -6,6 +6,9 @@
     ./vscode.nix
     ./git.nix
     ./kde.nix
+    ./zsh.nix
+    ./tmux.nix
+    ./neovim.nix
   ];
 
   home.username = "geoffeg";
