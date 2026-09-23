@@ -17,4 +17,4 @@ An (experimental) nix-config using flakes and home manager.
 ## TODO
 
 * SOPS/AGE encryption
-* KDE configuration with home manager.
+* KDE configuration with plasma manager.

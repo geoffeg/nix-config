@@ -4,7 +4,7 @@
   programs.ssh = {
     enable = true;
 
-    matchBlocks."*" = {
+    settings."*" = {
       controlMaster = "auto";
       controlPath = "~/.ssh/sockets/%C";
       controlPersist = "10m";
