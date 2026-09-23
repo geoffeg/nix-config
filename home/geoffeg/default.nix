@@ -9,6 +9,7 @@
     ./zsh.nix
     ./tmux.nix
     ./neovim.nix
+    ./ssh.nix
   ];
 
   home.username = "geoffeg";
