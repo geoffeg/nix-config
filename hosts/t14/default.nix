@@ -14,7 +14,7 @@
       ../../modules/desktop
       ../../modules/common/ssh.nix
       ../../modules/users/geoffeg.nix
-      ../../modules/laptop/power.nix
+      ../../modules/laptop
     ];
 
   networking = {
