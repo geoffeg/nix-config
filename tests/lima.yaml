@@ -1,0 +1,14 @@
+vmType: vz
+arch: aarch64
+
+cpus: 4
+memory: 8GiB
+disk: 8GiB
+
+mounts:
+  - location: "/Users/geoffeg/src/nix-config-ng"
+    writable: false
+
+containerd:
+  system: false
+  user: false
