@@ -17,6 +17,8 @@
       ../../modules/laptop
     ];
 
+  services.borgbackup.jobs.system.repo = "user@host:/path/to/backups";
+
   networking = {
     hostName = "t14"; # Define your hostname.
     networkmanager.enable = true; # Enable the NetworkManager service.
