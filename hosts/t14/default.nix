@@ -13,11 +13,13 @@
       ../../modules/common/default.nix
       ../../modules/desktop
       ../../modules/common/ssh.nix
+      ../../modules/services/tailscale.nix
       ../../modules/users/geoffeg.nix
       ../../modules/laptop
     ];
 
-  services.borgbackup.jobs.system.repo = "user@host:/path/to/backups";
+  services.borgbackup.jobs.system.repo = "geoffeg@alexandria:/var/services/homes/geoffeg/backups/t14";
+  services.borgbackup.jobs.system.environment.BORG_REMOTE_PATH = "/usr/local/bin/borg";
 
   networking = {
     hostName = "t14"; # Define your hostname.

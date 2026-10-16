@@ -24,6 +24,7 @@
       parallel
       btop
       pciutils
+      sops
     ]
     ++ lib.optionals (pkgs ? luke) [ pkgs.luke ];
 }

@@ -18,6 +18,16 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    secrets = {
+      url = "git+ssh://git@github.com/geoffeg/nix-sops-secrets.git?shallow=1&ref=main";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, disko, git-hooks, ... } @ inputs:

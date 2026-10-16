@@ -11,4 +11,10 @@ switch:
 
 update:
   nix flake update
+
+gen_machine_age_key:
+  sudo ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub
+
+gen_user_age_key:
+  ssh-to-age < ~/.ssh/id_ed25519.pub
   
