@@ -1,4 +1,7 @@
-{ ... }:
+{ config, lib, pkgs, ... }:
+let
+  hasKde = config.services.desktopManager.plasma6.enable;
+in
 {
   # Tailscale's shields-up/exit-node rules are supported on the nftables backend.
   networking.nftables.enable = true;
@@ -19,13 +22,18 @@
     enable = true;
     openFirewall = true;
     useRoutingFeatures = "client";
+    authKeyFile = config.sops.secrets.tailscaleAuthKey.path;
     extraUpFlags = [
       "--ssh"
       "--accept-dns=true"
       "--accept-routes=true"
       "--shields-up=false"
     ];
+    # KTailctl talks to tailscaled as a non-root user.
+    extraSetFlags = lib.optionals hasKde [ "--operator=geoffeg" ];
   };
 
-  networking.firewall.trustedInterfaces = [ "tailscale0" ];
+  environment.systemPackages = lib.optionals hasKde [
+    pkgs.ktailctl
+  ];
 }

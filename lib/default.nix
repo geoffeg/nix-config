@@ -62,6 +62,7 @@ in
         (hostModulePath hostsDir hostname)
         inputs.disko.nixosModules.disko
         inputs.home-manager.nixosModules.home-manager
+        inputs.sops-nix.nixosModules.sops
         {
           networking.hostName = lib.mkDefault hostname;
           home-manager.useGlobalPkgs = true;
